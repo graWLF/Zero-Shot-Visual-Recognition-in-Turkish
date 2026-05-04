@@ -2,6 +2,7 @@ import os
 import sys
 import json
 import torch
+import torch.nn.functional as F
 from PIL import Image
 from transformers import CLIPModel, CLIPProcessor
 from pathlib import Path

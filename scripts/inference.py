@@ -29,21 +29,27 @@ def load_model():
     return model, processor, device
 
 
+def _to_tensor(output):
+    if isinstance(output, torch.Tensor):
+        return output
+    if hasattr(output, "pooler_output"):
+        return output.pooler_output
+    return output.last_hidden_state[:, 0, :]
+
+
 def encode_texts(model, processor, device, prompts):
     texts = [p["prompt"] for p in prompts]
     inputs = processor(text=texts, return_tensors="pt", padding=True, truncation=True).to(device)
     with torch.no_grad():
-        embeddings = model.get_text_features(**inputs)
-    embeddings = embeddings / embeddings.norm(dim=-1, keepdim=True)
-    return embeddings
+        embeddings = _to_tensor(model.get_text_features(**inputs))
+    return F.normalize(embeddings, dim=-1)
 
 
 def encode_images_batch(model, processor, device, images):
     inputs = processor(images=images, return_tensors="pt").to(device)
     with torch.no_grad():
-        embeddings = model.get_image_features(**inputs)
-    embeddings = embeddings / embeddings.norm(dim=-1, keepdim=True)
-    return embeddings
+        embeddings = _to_tensor(model.get_image_features(**inputs))
+    return F.normalize(embeddings, dim=-1)
 
 
 def collect_images(domain):

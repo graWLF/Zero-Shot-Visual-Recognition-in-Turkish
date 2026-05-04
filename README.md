@@ -1,0 +1,1 @@
+# Zero-Shot-Visual-Recognition-in-Turkish

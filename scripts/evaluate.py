@@ -81,7 +81,7 @@ def main():
                 "b01": b01,
                 "b10": b10,
                 "p_value": round(p, 6),
-                "significant": p < ALPHA,
+                "significant": bool(p < ALPHA),
                 "bonferroni_alpha": ALPHA,
             })
         print()

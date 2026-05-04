@@ -6,7 +6,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib
 import seaborn as sns
-from sklearn.preprocessing import LabelEncoder
 
 matplotlib.rcParams["font.family"] = "DejaVu Sans"
 
@@ -112,6 +111,8 @@ def plot_fragmentation_scatter(predictions, summary):
 def plot_confusion_matrix(predictions):
     turkish_preds = [(r["true_label_tr"], r["turkish"]["top1"]) for r in predictions]
 
+    import sys, os
+    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     from scripts.prompts import CLASSES
     tr_labels = []
     en_to_tr = {}
@@ -167,6 +168,8 @@ def plot_token_count_barplot():
     from transformers import CLIPTokenizer
     tokenizer = CLIPTokenizer.from_pretrained("openai/clip-vit-base-patch32")
 
+    import sys, os
+    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     from scripts.prompts import CLASSES
     class_names, en_counts, tr_counts, domain_labels = [], [], [], []
     for domain in DOMAINS:

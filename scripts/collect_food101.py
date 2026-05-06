@@ -46,8 +46,20 @@ def main():
     for cls in CLASSES["food_international"]:
         os.makedirs(os.path.join(OUT_BASE, cls["en"]), exist_ok=True)
 
-    counts = {cls["en"]: 0 for cls in CLASSES["food_international"]}
+    # Skip classes that already have enough images
+    counts = {}
     done = set()
+    for cls in CLASSES["food_international"]:
+        cls_en = cls["en"]
+        existing = len([f for f in os.listdir(os.path.join(OUT_BASE, cls_en)) if f.endswith(".jpg")])
+        counts[cls_en] = existing
+        if existing >= SAVE_PER_CLASS:
+            print(f"  {cls_en}: already has {existing} images, skipping")
+            done.add(cls_en)
+
+    if len(done) == len(FOOD101_LABEL_MAP):
+        print("All food_international classes already complete.")
+        return
 
     print("\nStreaming dataset...")
     for example in ds:

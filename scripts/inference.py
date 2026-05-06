@@ -14,7 +14,7 @@ REPO_ROOT = Path(__file__).parent.parent
 DATA_DIR = REPO_ROOT / "data"
 RESULTS_DIR = REPO_ROOT / "results"
 BATCH_SIZE = 16
-MODEL_NAME = "openai/clip-vit-base-patch32"
+MODEL_NAME = "openai/clip-vit-large-patch14"
 
 DOMAINS = ["animals", "food_international", "food_turkish", "traffic_signs", "landmarks"]
 CONDITIONS = ["english", "turkish", "mixed"]

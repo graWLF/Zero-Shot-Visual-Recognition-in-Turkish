@@ -39,24 +39,28 @@ def collect():
         "Collect Wikimedia images — food Turkish, traffic signs, landmarks (skips existing)")
 
 
+VIT_TAG = {"b32": "vitb32", "l14": "vitl14"}
+
+
 def run_model(tag, label):
+    vit = VIT_TAG[tag]
     run([PYTHON, "scripts/inference.py",
          "--model", tag,
-         "--output", f"predictions_{tag}.json"],
+         "--output", f"predictions_{vit}.json"],
         f"Inference — CLIP {label}")
 
     run([PYTHON, "scripts/evaluate.py",
-         "--input",  f"predictions_{tag}.json",
-         "--output", f"evaluation_summary_{tag}.json"],
+         "--input",  f"predictions_{vit}.json",
+         "--output", f"evaluation_summary_{vit}.json"],
         f"Evaluate — CLIP {label}")
 
     # Keep the latest model's files as the default (used by visualize.py)
     results = REPO_ROOT / "results"
-    shutil.copy(results / f"predictions_{tag}.json",
+    shutil.copy(results / f"predictions_{vit}.json",
                 results / "predictions.json")
-    shutil.copy(results / f"evaluation_summary_{tag}.json",
+    shutil.copy(results / f"evaluation_summary_{vit}.json",
                 results / "evaluation_summary.json")
-    print(f"  Copied {tag} results → predictions.json / evaluation_summary.json")
+    print(f"  Copied {vit} results → predictions.json / evaluation_summary.json")
 
 
 def main():
@@ -75,16 +79,6 @@ def main():
     else:
         labels = {"b32": "ViT-B/32", "l14": "ViT-L/14"}
         run_model(args.model, labels[args.model])
-
-    # Rename b32 files to the names visualize.py expects for the comparison plot
-    results = REPO_ROOT / "results"
-    for src, dst in [
-        ("predictions_b32.json",        "predictions_vitb32.json"),
-        ("evaluation_summary_b32.json", "evaluation_summary_vitb32.json"),
-    ]:
-        src_path = results / src
-        if src_path.exists():
-            shutil.copy(src_path, results / dst)
 
     run([PYTHON, "scripts/visualize.py"], "Generate all plots")
 

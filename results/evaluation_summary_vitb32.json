@@ -1,0 +1,226 @@
+{
+  "per_domain": {
+    "animals": {
+      "english": {
+        "top1": 0.87,
+        "top5": 0.98,
+        "n": 200
+      },
+      "turkish": {
+        "top1": 0.45,
+        "top5": 0.695,
+        "n": 200
+      },
+      "mixed": {
+        "top1": 0.445,
+        "top5": 0.79,
+        "n": 200
+      }
+    },
+    "food_international": {
+      "english": {
+        "top1": 0.975,
+        "top5": 1.0,
+        "n": 200
+      },
+      "turkish": {
+        "top1": 0.395,
+        "top5": 0.6,
+        "n": 200
+      },
+      "mixed": {
+        "top1": 0.53,
+        "top5": 0.785,
+        "n": 200
+      }
+    },
+    "food_turkish": {
+      "english": {
+        "top1": 0.505,
+        "top5": 0.85,
+        "n": 200
+      },
+      "turkish": {
+        "top1": 0.31,
+        "top5": 0.73,
+        "n": 200
+      },
+      "mixed": {
+        "top1": 0.355,
+        "top5": 0.8,
+        "n": 200
+      }
+    },
+    "traffic_signs": {
+      "english": {
+        "top1": 0.5607,
+        "top5": 0.8714,
+        "n": 280
+      },
+      "turkish": {
+        "top1": 0.0929,
+        "top5": 0.4214,
+        "n": 280
+      },
+      "mixed": {
+        "top1": 0.0786,
+        "top5": 0.4393,
+        "n": 280
+      }
+    },
+    "landmarks": {
+      "english": {
+        "top1": 0.8031,
+        "top5": 0.9688,
+        "n": 320
+      },
+      "turkish": {
+        "top1": 0.3937,
+        "top5": 0.7719,
+        "n": 320
+      },
+      "mixed": {
+        "top1": 0.4469,
+        "top5": 0.8156,
+        "n": 320
+      }
+    }
+  },
+  "mcnemar": [
+    {
+      "domain": "animals",
+      "comparison": "english vs turkish",
+      "b01": 87,
+      "b10": 3,
+      "p_value": 0.0,
+      "significant": true,
+      "bonferroni_alpha": 0.0033333333333333335
+    },
+    {
+      "domain": "animals",
+      "comparison": "english vs mixed",
+      "b01": 89,
+      "b10": 4,
+      "p_value": 0.0,
+      "significant": true,
+      "bonferroni_alpha": 0.0033333333333333335
+    },
+    {
+      "domain": "animals",
+      "comparison": "turkish vs mixed",
+      "b01": 13,
+      "b10": 12,
+      "p_value": 1.0,
+      "significant": false,
+      "bonferroni_alpha": 0.0033333333333333335
+    },
+    {
+      "domain": "food_international",
+      "comparison": "english vs turkish",
+      "b01": 117,
+      "b10": 1,
+      "p_value": 0.0,
+      "significant": true,
+      "bonferroni_alpha": 0.0033333333333333335
+    },
+    {
+      "domain": "food_international",
+      "comparison": "english vs mixed",
+      "b01": 90,
+      "b10": 1,
+      "p_value": 0.0,
+      "significant": true,
+      "bonferroni_alpha": 0.0033333333333333335
+    },
+    {
+      "domain": "food_international",
+      "comparison": "turkish vs mixed",
+      "b01": 0,
+      "b10": 27,
+      "p_value": 1e-06,
+      "significant": true,
+      "bonferroni_alpha": 0.0033333333333333335
+    },
+    {
+      "domain": "food_turkish",
+      "comparison": "english vs turkish",
+      "b01": 54,
+      "b10": 15,
+      "p_value": 5e-06,
+      "significant": true,
+      "bonferroni_alpha": 0.0033333333333333335
+    },
+    {
+      "domain": "food_turkish",
+      "comparison": "english vs mixed",
+      "b01": 50,
+      "b10": 20,
+      "p_value": 0.000528,
+      "significant": true,
+      "bonferroni_alpha": 0.0033333333333333335
+    },
+    {
+      "domain": "food_turkish",
+      "comparison": "turkish vs mixed",
+      "b01": 9,
+      "b10": 18,
+      "p_value": 0.123658,
+      "significant": false,
+      "bonferroni_alpha": 0.0033333333333333335
+    },
+    {
+      "domain": "traffic_signs",
+      "comparison": "english vs turkish",
+      "b01": 144,
+      "b10": 13,
+      "p_value": 0.0,
+      "significant": true,
+      "bonferroni_alpha": 0.0033333333333333335
+    },
+    {
+      "domain": "traffic_signs",
+      "comparison": "english vs mixed",
+      "b01": 144,
+      "b10": 9,
+      "p_value": 0.0,
+      "significant": true,
+      "bonferroni_alpha": 0.0033333333333333335
+    },
+    {
+      "domain": "traffic_signs",
+      "comparison": "turkish vs mixed",
+      "b01": 11,
+      "b10": 7,
+      "p_value": 0.4795,
+      "significant": false,
+      "bonferroni_alpha": 0.0033333333333333335
+    },
+    {
+      "domain": "landmarks",
+      "comparison": "english vs turkish",
+      "b01": 141,
+      "b10": 10,
+      "p_value": 0.0,
+      "significant": true,
+      "bonferroni_alpha": 0.0033333333333333335
+    },
+    {
+      "domain": "landmarks",
+      "comparison": "english vs mixed",
+      "b01": 124,
+      "b10": 10,
+      "p_value": 0.0,
+      "significant": true,
+      "bonferroni_alpha": 0.0033333333333333335
+    },
+    {
+      "domain": "landmarks",
+      "comparison": "turkish vs mixed",
+      "b01": 16,
+      "b10": 33,
+      "p_value": 0.022271,
+      "significant": false,
+      "bonferroni_alpha": 0.0033333333333333335
+    }
+  ]
+}

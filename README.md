@@ -10,52 +10,41 @@ CLIP is trained predominantly on English text-image pairs. When we replace Engli
 
 ---
 
-## Running
+## HOW TO RUN
 
-Run each step in order. Each script is independent and can be re-run safely (image collection scripts skip already-downloaded classes).
-
-### Step 1 — Collect animal images
 ```bash
-python scripts/collect_imagenet.py
+python run.py
 ```
 
-### Step 2 — Collect food international images
+The pipeline will:
+1. Download images for all 60 classes (**already-downloaded classes are skipped automatically**)
+2. Run inference with **ViT-B/32**
+3. Run inference with **ViT-L/14**
+4. Evaluate both models (accuracy, McNemar tests, Bonferroni correction)
+5. Generate all plots including the B/32 vs L/14 comparison
+
+
+### Options
+
 ```bash
-python scripts/collect_food101.py
+python run.py --model b32   # run ViT-B/32 only
+python run.py --model l14   # run ViT-L/14 only
+python run.py --model both  # default — runs both in order
 ```
 
-### Step 3 — Collect food Turkish, traffic signs, and landmark images
+### Running scripts individually
+
+Each script can also be run on its own:
+
 ```bash
-python scripts/collect_wikimedia.py
+python scripts/collect_imagenet.py          # animals
+python scripts/collect_food101.py           # food international
+python scripts/collect_wikimedia.py         # food Turkish, traffic signs, landmarks
+python scripts/inference.py --model b32     # inference with ViT-B/32
+python scripts/inference.py --model l14     # inference with ViT-L/14
+python scripts/evaluate.py                  # evaluate current predictions.json
+python scripts/visualize.py                 # generate all plots
 ```
-
-> Wikimedia Commons rate-limits downloads. The scripts include automatic retry logic with delays. Expect ~15–30 minutes for a full collection run.
-
-### Step 4 — Run CLIP inference
-```bash
-python scripts/inference.py
-```
-
-Outputs `results/predictions.json` with top-1 and top-5 predictions for all 1,200 images across all 3 conditions. To switch models, change `MODEL_NAME` in `scripts/inference.py`:
-
-```python
-MODEL_NAME = "openai/clip-vit-base-patch32"   # ViT-B/32 (default)
-MODEL_NAME = "openai/clip-vit-large-patch14"  # ViT-L/14 (larger, higher accuracy)
-```
-
-### Step 5 — Evaluate
-```bash
-python scripts/evaluate.py
-```
-
-Prints accuracy tables and McNemar test results. Outputs `results/evaluation_summary.json`.
-
-### Step 6 — Visualize
-```bash
-python scripts/visualize.py
-```
-
-Generates all 5 plots in `plots/`.
 
 ---
 
@@ -144,6 +133,7 @@ Food Turkish has the lowest fragmentation (many Turkish food words like *börek*
 
 ```
 .
+├── run.py                        # Single entry point — runs full pipeline
 ├── data/
 │   ├── animals/              # 10 classes × 20 images
 │   ├── food_international/   # 10 classes × 20 images

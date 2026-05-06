@@ -1,5 +1,6 @@
 import json
 import os
+import argparse
 from pathlib import Path
 from collections import defaultdict
 import numpy as np
@@ -30,7 +31,14 @@ def compute_accuracy(records, condition, k=1):
 
 
 def main():
-    pred_path = RESULTS_DIR / "predictions.json"
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--input", type=str, default="predictions.json",
+                        help="Input predictions filename")
+    parser.add_argument("--output", type=str, default="evaluation_summary.json",
+                        help="Output summary filename")
+    args = parser.parse_args()
+
+    pred_path = RESULTS_DIR / args.input
     with open(pred_path, encoding="utf-8") as f:
         predictions = json.load(f)
 
@@ -86,7 +94,7 @@ def main():
             })
         print()
 
-    out_path = RESULTS_DIR / "evaluation_summary.json"
+    out_path = RESULTS_DIR / args.output
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(summary, f, ensure_ascii=False, indent=2)
     print(f"Saved evaluation summary to {out_path}")

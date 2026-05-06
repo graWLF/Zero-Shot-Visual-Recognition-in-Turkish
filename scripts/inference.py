@@ -1,6 +1,7 @@
 import os
 import sys
 import json
+import argparse
 import torch
 import torch.nn.functional as F
 from PIL import Image
@@ -14,17 +15,21 @@ REPO_ROOT = Path(__file__).parent.parent
 DATA_DIR = REPO_ROOT / "data"
 RESULTS_DIR = REPO_ROOT / "results"
 BATCH_SIZE = 16
-MODEL_NAME = "openai/clip-vit-large-patch14"
+
+MODELS = {
+    "b32": "openai/clip-vit-base-patch32",
+    "l14": "openai/clip-vit-large-patch14",
+}
 
 DOMAINS = ["animals", "food_international", "food_turkish", "traffic_signs", "landmarks"]
 CONDITIONS = ["english", "turkish", "mixed"]
 
 
-def load_model():
+def load_model(model_name):
     device = "cuda" if torch.cuda.is_available() else "cpu"
     print(f"Using device: {device}")
-    model = CLIPModel.from_pretrained(MODEL_NAME).to(device)
-    processor = CLIPProcessor.from_pretrained(MODEL_NAME)
+    model = CLIPModel.from_pretrained(model_name).to(device)
+    processor = CLIPProcessor.from_pretrained(model_name)
     model.eval()
     return model, processor, device
 
@@ -79,8 +84,19 @@ def get_top_predictions(similarities, prompts, k=5):
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--model", choices=["b32", "l14"], default="l14",
+                        help="Model scale: b32 = ViT-B/32, l14 = ViT-L/14")
+    parser.add_argument("--output", type=str, default=None,
+                        help="Output filename (default: predictions.json)")
+    args = parser.parse_args()
+
+    model_name = MODELS[args.model]
+    out_filename = args.output or "predictions.json"
+    print(f"Model: {model_name}")
+
     RESULTS_DIR.mkdir(exist_ok=True)
-    model, processor, device = load_model()
+    model, processor, device = load_model(model_name)
 
     print("Pre-computing text embeddings...")
     text_embeddings = {}
@@ -145,7 +161,7 @@ def main():
             done = batch_start + len(batch)
             print(f"  Processed {done}/{len(all_entries)} images")
 
-    out_path = RESULTS_DIR / "predictions.json"
+    out_path = RESULTS_DIR / out_filename
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(results, f, ensure_ascii=False, indent=2)
     print(f"\nSaved {len(results)} predictions to {out_path}")

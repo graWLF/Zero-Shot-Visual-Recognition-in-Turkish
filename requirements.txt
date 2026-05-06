@@ -1,0 +1,9 @@
+torch
+torchvision
+transformers
+datasets
+Pillow
+requests
+matplotlib
+seaborn
+scipy

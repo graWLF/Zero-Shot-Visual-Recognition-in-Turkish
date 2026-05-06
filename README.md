@@ -13,6 +13,7 @@ CLIP is trained predominantly on English text-image pairs. When we replace Engli
 ## HOW TO RUN
 
 ```bash
+pip install -r requirements.txt
 python run.py
 ```
 
@@ -133,49 +134,60 @@ Food Turkish has the lowest fragmentation (many Turkish food words like *börek*
 
 ```
 .
-├── run.py                        # Single entry point — runs full pipeline
-├── data/
-│   ├── animals/              # 10 classes × 20 images
-│   ├── food_international/   # 10 classes × 20 images
-│   ├── food_turkish/         # 10 classes × 20 images
-│   ├── traffic_signs/        # 14 classes × 20 images
-│   └── landmarks/            # 16 classes × 20 images
+├── run.py                               # Single entry point — runs full pipeline
 ├── scripts/
-│   ├── prompts.py            # Class definitions and prompt templates
-│   ├── collect_imagenet.py   # Animals data collection (Wikimedia)
-│   ├── collect_food101.py    # Food International (HuggingFace Food-101)
-│   ├── collect_wikimedia.py  # Food Turkish, Traffic Signs, Landmarks
-│   ├── fix_missing.py        # Fallback collector for hard-to-find classes
-│   ├── inference.py          # CLIP zero-shot inference
-│   ├── evaluate.py           # Accuracy + McNemar + Bonferroni
-│   └── visualize.py          # 5 result plots
+│   ├── prompts.py                       # Class definitions and prompt templates
+│   ├── collect_imagenet.py              # Animals data collection (Wikimedia Commons)
+│   ├── collect_food101.py               # Food International (HuggingFace Food-101)
+│   ├── collect_wikimedia.py             # Food Turkish, Traffic Signs, Landmarks (Wikimedia)
+│   ├── fix_missing.py                   # Fallback collector for hard-to-find classes
+│   ├── inference.py                     # CLIP zero-shot inference (ViT-B/32 or ViT-L/14)
+│   ├── evaluate.py                      # Accuracy + McNemar + Bonferroni
+│   └── visualize.py                     # 7 result plots
+├── data/
+│   ├── animals/                         # 10 classes × 20 images
+│   ├── food_international/              # 10 classes × 20 images
+│   ├── food_turkish/                    # 10 classes × 20 images
+│   ├── traffic_signs/                   # 14 classes × 20 images
+│   └── landmarks/                       # 16 classes × 20 images
 ├── results/
-│   ├── predictions.json             # Current model predictions (1200 entries)
-│   ├── evaluation_summary.json      # Current model evaluation
-│   ├── predictions_vitb32.json      # ViT-B/32 backup
-│   └── evaluation_summary_vitb32.json
+│   ├── predictions.json                 # Default predictions (copy of last model run)
+│   ├── evaluation_summary.json          # Default evaluation (copy of last model run)
+│   ├── predictions_vitb32.json          # ViT-B/32 predictions (1200 entries)
+│   ├── evaluation_summary_vitb32.json   # ViT-B/32 accuracy + McNemar
+│   ├── predictions_vitl14.json          # ViT-L/14 predictions (1200 entries)
+│   └── evaluation_summary_vitl14.json   # ViT-L/14 accuracy + McNemar
 └── plots/
-    ├── accuracy_barplot.png
-    ├── fragmentation_scatter.png
-    ├── confusion_matrix.png
-    ├── accuracy_heatmap.png
-    └── token_count_barplot.png
+    ├── accuracy_barplot.png             # Top-1 accuracy by domain and condition
+    ├── fragmentation_scatter.png        # BPE fragmentation vs accuracy drop
+    ├── confusion_matrix.png             # Top misclassification pairs + class heatmap
+    ├── top_misclassifications.png       # Table of most frequent misclassifications
+    ├── accuracy_heatmap.png             # Accuracy heatmap across all conditions
+    ├── token_count_barplot.png          # BPE token counts per class
+    └── model_comparison.png             # ViT-B/32 vs ViT-L/14 accuracy gap
 ```
 
 ---
 
-## Installation
+## Requirements
 
-**Requirements:** Python 3.10+, Conda
+**Python 3.10+**
 
-```bash
-conda create -n CV python=3.12
-conda activate CV
-pip install torch torchvision --index-url https://download.pytorch.org/whl/cu118
-pip install transformers datasets Pillow requests matplotlib seaborn scipy
-```
+torch
+torchvision
+transformers
+datasets
+Pillow
+requests
+matplotlib
+seaborn
+scipy
 
-> If you don't have a CUDA GPU, omit the `--index-url` flag and PyTorch will install the CPU version. Inference will be slower but will still work.
+> For CUDA GPU support, install PyTorch separately before the above:
+> ```bash
+> pip install torch torchvision --index-url https://download.pytorch.org/whl/cu118
+> ```
+> Without this, PyTorch installs the CPU version — inference will be slower but still works.
 
 ---
 
